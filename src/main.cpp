@@ -1,23 +1,24 @@
 #include <iostream>
-#include <cmath>
-
-using namespace std;
 
 int main()
 {
-    int a, b, c;
-    std::cin >> a >> b >> c;
-
-    double discriminant = (b * b) - (4 * a * c);
-    if (discriminant >= 0.0)
+    char c = '\0';
+    bool seenSpace{false};
+    while (std::cin.get(c))
     {
-        double answer1 = (-b + std::sqrt(discriminant)) / (2 * a);
-        double answer2 = (-b - std::sqrt(discriminant)) / (2 * a);
-        std::cout << answer1 << ' ' << answer2 << '\n';
-    }
-    else
-    {
-        std::cout << "No real roots" << '\n';
+        if (c == ' ')
+        {
+            if (!seenSpace)
+            {
+                seenSpace = true;
+                std::cout << c;
+            }
+        }
+        else
+        {
+            std::cout << c;
+            seenSpace = false;
+        }
     }
 
     return 0;
