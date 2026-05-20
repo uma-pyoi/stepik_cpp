@@ -1,24 +1,41 @@
 #include <iostream>
 
+int raise2ToPower(int x)
+{
+    int result = 1;
+    for (int i = 0; i < x; ++i)
+    {
+        result *= 2;
+    }
+    return result;
+}
+
 int main()
 {
-    char c = '\0';
-    bool seenSpace{false};
-    while (std::cin.get(c))
+    int numOfTests{0};
+    std::cin >> numOfTests;
+
+    for (int i = 0; i < numOfTests; ++i)
     {
-        if (c == ' ')
+        int a{0};
+        std::cin >> a;
+
+        int biggestPower{0}; // in case when a = 1, so 2 to the power of 0 is 1
+
+        while (true)
         {
-            if (!seenSpace)
+            int result = raise2ToPower(biggestPower);
+            if (result <= a)
             {
-                seenSpace = true;
-                std::cout << c;
+                biggestPower++;
+            }
+            else
+            {
+                biggestPower--;
+                break;
             }
         }
-        else
-        {
-            std::cout << c;
-            seenSpace = false;
-        }
+        std::cout << biggestPower << '\n';
     }
 
     return 0;
