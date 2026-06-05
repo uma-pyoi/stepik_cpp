@@ -1,19 +1,37 @@
 #include <iostream>
 
-void bar() {
-    int c;
-    std::cout << "c: " << c << '\n'; // on the second call in main c will be value of b
+void moveOne(int numArr[], unsigned size) {
+    int * numArrPointer = numArr;
+    int firstNum = numArr[0];
+
+    for (int i = 0; i < (size - 1); ++i) {
+        *(numArrPointer + i) = numArr[i + 1];
+    }
+    *(numArrPointer + size - 1) = firstNum;
 }
 
-void foo() {
-    int b = 67;
-    bar();
-}
-
-int main()
+void rotate(int a[], unsigned size, int shift)
 {
-    foo();
-    bar();
+    if (shift >= size) {
+        shift = shift % size;
+    }
+
+    for (shift; shift > 0; --shift) {
+        moveOne(a, size);
+    }
+}
+
+int main() {
+    int numArr[5] = {1, 2, 3, 4, 5};
+    rotate(numArr, 5, 7);
+    std::cout << "numArr:  ";
+    for (int i = 0; i < 5; ++i) {
+        std::cout << numArr[i] << ' ';
+    }
 
     return 0;
 }
+
+
+
+
