@@ -1,35 +1,25 @@
-#include <iostream>
+// counting the length of a C style string given that
+// string 1 has enough space for string 2
 
-void moveOne(int numArr[], unsigned size) {
-    int * numArrPointer = numArr;
-    int firstNum = numArr[0];
 
-    for (int i = 0; i < (size - 1); ++i) {
-        *(numArrPointer + i) = numArr[i + 1];
+unsigned strlen(const char *str) {
+    unsigned length{0};
+    while (*str != '\0') {
+        length++;
+        str++;
     }
-    *(numArrPointer + size - 1) = firstNum;
+    return length;
 }
 
-void rotate(int a[], unsigned size, int shift)
-{
-    if (shift >= size) {
-        shift = shift % size;
+void strcat(char *to, const char *from) {
+    unsigned str1_len = strlen(to);
+    unsigned str2_len = strlen(from);
+    int j{0};
+    for (int i = str1_len; i < (str1_len + str2_len); ++i) {
+        *(to + i) = *(from + j);
+        j++;
     }
-
-    for (shift; shift > 0; --shift) {
-        moveOne(a, size);
-    }
-}
-
-int main() {
-    int numArr[5] = {1, 2, 3, 4, 5};
-    rotate(numArr, 5, 7);
-    std::cout << "numArr:  ";
-    for (int i = 0; i < 5; ++i) {
-        std::cout << numArr[i] << ' ';
-    }
-
-    return 0;
+    *(to + (str1_len + str2_len)) = '\0';
 }
 
 
