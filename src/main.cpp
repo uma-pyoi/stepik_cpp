@@ -1,49 +1,61 @@
 #include <iostream>
 
-void print_2d_matrix(int **m, unsigned rows, unsigned cols) {
-    std::cout << "printing... :3" << '\n';
-    for (int p = 0; p < rows; ++p) {
-        for (int d = 0; d < cols; ++d) {
-            std::cout << m[p][d] << ' ';
-        }
-        std::cout << '\n';
-    }
-}
+#include <cstddef> // size_t
+#include <cstring> // strlen, strcpy
 
-// swap the row with the smallest int with the first row
-void swap_min(int *m[], unsigned rows, unsigned cols) {
-    int smallest{m[0][0]};
-    int row_of_smallest{};
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            if (m[i][j] < smallest) {
-                smallest = m[i][j];
-                row_of_smallest = i;
-            }
+struct String {
+    /* Реализуйте этот конструктор */
+    String(const char *str = "") {
+        size = std::strlen(str);
+        this->str = new char[size + 1];
+        std::strcpy(this->str, str);
+    };
+
+    String(size_t n, char c) {
+        size = n;
+        str = new char[n + 1];
+        for (int i = 0; i < size; ++i) {
+            str[i] = c;
         }
+        str[size + 1] = '\0';
     }
 
-    int *row_of_smallest_ptr = m[row_of_smallest];
-    m[row_of_smallest] = m[0];
-    m[0] = row_of_smallest_ptr;
-}
+    ~String() {
+        delete [] str;
+    }
 
+    void append(String &other) {
+        char *new_str = new char[size + other.size + 1];
+        std::strcpy(new_str, str);
+        std::strcpy(new_str + size, other.str);
+        size += other.size;
+        delete [] str;
+        str = new_str;
+    }
+
+    void print() {
+        std::cout << "size: " << size << '\n';
+        std::cout << "str: " << str << '\n';
+    }
+
+    std::size_t size;
+    char *str;
+};
 
 int main() {
-    // whatever matrix
-    constexpr unsigned rows{3};
-    constexpr unsigned cols{4};
-    int data[rows][cols] = {
-        {1, 2, 3, 4},
-        {5, 6, 7, 8},
-        {9, 10, 11, 12}
-    };
-    int *m[rows];
-    for (int i = 0; i < rows; ++i)
-        m[i] = data[i];
+    String meow(3, 'm');
+    meow.print();
 
-    print_2d_matrix(m, rows, cols);
+    String hello(", hello");
+    hello.print();
 
+    std::cout << "--------------" << '\n';
+    meow.append(hello);
+    meow.print();
+    std::cout << "--------------" << '\n';
 
+    String world("World");
+    world.append(world);
+    world.print();
     return 0;
 }
