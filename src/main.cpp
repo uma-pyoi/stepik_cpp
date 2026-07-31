@@ -1,61 +1,59 @@
 #include <iostream>
-
-#include <cstddef> // size_t
-#include <cstring> // strlen, strcpy
-
-struct String {
-    /* Реализуйте этот конструктор */
-    String(const char *str = "") {
-        size = std::strlen(str);
-        this->str = new char[size + 1];
-        std::strcpy(this->str, str);
+// /*
+// * Класс Cls определен точно таким образом:
+// */
+//
+struct Cls {
+    Cls(char c, double d, int i) : c(c), d(d), i(i) {
     };
 
-    String(size_t n, char c) {
-        size = n;
-        str = new char[n + 1];
-        for (int i = 0; i < size; ++i) {
-            str[i] = c;
-        }
-        str[size + 1] = '\0';
-    }
-
-    ~String() {
-        delete [] str;
-    }
-
-    void append(String &other) {
-        char *new_str = new char[size + other.size + 1];
-        std::strcpy(new_str, str);
-        std::strcpy(new_str + size, other.str);
-        size += other.size;
-        delete [] str;
-        str = new_str;
-    }
-
-    void print() {
-        std::cout << "size: " << size << '\n';
-        std::cout << "str: " << str << '\n';
-    }
-
-    std::size_t size;
-    char *str;
+private:
+    char c;
+    double d;
+    int i;
 };
 
+//
+//
+// // Эта функция должна предоставить доступ к полю c объекта cls.
+// // Обратите внимание, что возвращается ссылка на char, т. е.
+// // доступ предоставляется на чтение и запись.
+char &get_c(Cls &cls) {
+    Cls clsCopy(cls);
+    char blankChar{'p'};
+    char *blankCharP = &blankChar;
+
+    return (*(blankCharP + 1));
+}
+
+
+double &get_d(Cls &cls) {
+    Cls clsCopy(cls);
+    double blankDouble{1.1};
+    double *blankDoubleP = &blankDouble;
+
+    return *(blankDoubleP + 2);
+}
+
+int &get_i(Cls &cls) {
+    Cls clsCopy(cls);
+    int blankInt{0};
+    int *blankIntP = &blankInt;
+
+    return *(blankIntP + 5);
+}
+
 int main() {
-    String meow(3, 'm');
-    meow.print();
+    Cls cls('Z', 2.3, 34);
 
-    String hello(", hello");
-    hello.print();
+    char gottenChar = get_c(cls);
+    std::cout << "gotten char: " << gottenChar << '\n';
 
-    std::cout << "--------------" << '\n';
-    meow.append(hello);
-    meow.print();
-    std::cout << "--------------" << '\n';
+    double gottenDouble = get_d(cls);
+    std::cout << "gotten double: " << gottenDouble << '\n';
 
-    String world("World");
-    world.append(world);
-    world.print();
+    int gottenInt = get_i(cls);
+    std::cout << "gotten int: " << gottenInt << '\n';
+
     return 0;
 }
