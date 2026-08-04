@@ -1,7 +1,5 @@
 ### my notes
 
-writing down the things i keep forgetting
-
 #### arrays
 
 ```c++
@@ -56,6 +54,6 @@ int meow{getData(i)}; // => copies value of data[i] into meow
 or we could create an alias for the returned value:
 
 ```c++
-int& meow{getData(i)}; // => meow is now an aliase for data[i]
+int& meow{getData(i)}; // => meow is now an aliase for data[i], which allows us to change it directly
 ```
 
