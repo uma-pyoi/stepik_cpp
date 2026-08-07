@@ -1,39 +1,89 @@
 #include <iostream>
 
-class Cat {
-    int age{};
-    mutable int counter{}; // can be changed in const methods
+#include <cstring> // strlen, strcpy
 
-public:
-    const Cat *getCatP() const {
-        return this;
+struct IntArray {
+    explicit IntArray(size_t size) : size_(size), data_(new int[size]) {
+        for (size_t i = 0; i != size; ++i) {
+            data_[i] = 0;
+        }
     }
 
-    void print() {
-        std::cout << "non-const age: " << this->age << " counter: " << this->counter << '\n';
+    IntArray(IntArray const &a) : size_(a.size_), data_(new int[a.size_]) {
+        for (size_t i = 0; i != a.size_; ++i) {
+            data_[i] = a.data_[i];
+        }
+    }
+
+    ~IntArray() {
+        delete [] data_;
+    }
+
+    IntArray &operator=(IntArray const &a) {
+        if (this != &a) {
+            IntArray(a).swap(*this);
+        }
+        return *this;
+    }
+
+    void swap(IntArray &a) {
+        std::swap(this->size_, a.size_);
+        std::swap(this->data_, a.data_);
+    }
+
+    size_t size() const {
+        return this->size_;
+    }
+
+    int get(size_t i) const {
+        return this->data_[i];
+    }
+
+    int &get(size_t i) {
+        return this->data_[i];
+    }
+
+    void resize(size_t newSize) {
+        IntArray newIntArray(newSize);
+        size_t validNewSize = newSize > this->size_ ? newSize : this->size_;
+        for (size_t i = 0; i != validNewSize; ++i) {
+            newIntArray.data_[i] = this->data_[i];
+        }
+        swap(newIntArray);
     }
 
     void print() const {
-        std::cout << "const age: " << this->age << " counter: " << this->counter << '\n';
+        for (size_t i = 0; i != this->size_; ++i) {
+            std::cout << this->data_[i] << " ";
+        }
+        std::cout << '\n';
     }
 
-    void changeAge(int newAge) {
-        this->age = newAge;
-    }
-
-    void incrementCounter() const {
-        this->counter++;
-    }
+private:
+    size_t size_;
+    int *data_;
 };
 
+
 int main() {
-    Cat newCat;
-    const Cat *catP{newCat.getCatP()};
-    catP->print();
-    newCat.changeAge(12);
-    catP->incrementCounter();
-    catP->print();
-    newCat.print();
+    IntArray intArray1(3);
+    intArray1.get(1) = 2;
+    std::cout << "1 arr: ";
+    intArray1.print();
+    intArray1.resize(5);
+    std::cout << "1 arr after resize: ";
+    intArray1.print();
+
+    IntArray intArray2(2);
+    intArray2.get(0) = 11;
+    std::cout << "2 arr: ";
+    intArray2.print();
+
+    intArray1.swap(intArray2);
+    std::cout << "!! after swap !! " << '\n' << "1 arr: ";
+    intArray1.print();
+    std::cout << "2 arr: ";
+    intArray2.print();
 
     return 0;
 }

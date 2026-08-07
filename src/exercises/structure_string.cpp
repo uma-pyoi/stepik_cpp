@@ -1,12 +1,11 @@
 #if 0
-
 #include <iostream>
 
 #include <cstddef> // size_t
 #include <cstring> // strlen, strcpy
+#include <algorithm> // swap
 
 struct String {
-    /* Реализуйте этот конструктор */
     String(const char *str = "") {
         size = std::strlen(str);
         this->str = new char[size + 1];
@@ -19,11 +18,47 @@ struct String {
         for (int i = 0; i < size; ++i) {
             str[i] = c;
         }
-        str[size + 1] = '\0';
+        str[size] = '\0';
+    }
+
+    String(const String &other) {
+        this->size = other.size;
+        this->str = new char[this->size + 1];
+        std::strcpy(this->str, other.str);
     }
 
     ~String() {
         delete [] str;
+    }
+
+    // assignment operator using swap
+    // (creates a temp copy of str to assign and swaps this str and the temp copy.
+    // copy gets destroyed)
+    String &operator =(String const &other) {
+        if (this != &other) {
+            String test(other);
+            std::cout << "test size: " << test.size << '\n';
+            test.swap(*this);
+        }
+        return *this;
+    }
+
+    // assignment operator bland
+    // String &operator =(String const &other) {
+    //     if (this != &other) {
+    //         delete [] this->str;
+    //
+    //         this->size = other.size;
+    //         this->str = new char[this->size + 1];
+    //
+    //         std::strcpy(this->str, other.str);
+    //     }
+    //     return *this;
+    // }
+
+    void swap(String &other) {
+        std::swap(size, other.size);
+        std::swap(str, other.str);
     }
 
     void append(String &other) {
@@ -46,19 +81,15 @@ struct String {
 
 int main() {
     String meow(3, 'm');
-    meow.print();
+    String hello("hello my world!");
+    std::cout << meow.str << '\n';
+    std::cout << hello.str << '\n';
+    meow = hello;
+    std::cout << "========= after \"meow = hello;\" =========" << '\n';
+    std::cout << "size: " << meow.size << " | " << hello.size << '\n';
+    std::cout << meow.str << '\n';
+    std::cout << hello.str << '\n';
 
-    String hello(", hello");
-    hello.print();
-
-    std::cout << "--------------" << '\n';
-    meow.append(hello);
-    meow.print();
-    std::cout << "--------------" << '\n';
-
-    String world("World");
-    world.append(world);
-    world.print();
     return 0;
 }
 
