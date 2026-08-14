@@ -57,3 +57,38 @@ or we could create an alias for the returned value:
 int& meow{getData(i)}; // => meow is now an aliase for data[i], which allows us to change it directly
 ```
 
+###### & alias for temp objects
+
+for temporary objects, only const references can be made. (because non-const aliases will be unsafe).
+moreover, the temporary object will have its life prolonged as long as the const alias is in scope.
+
+```c++
+Foo &get_foo(char *msg) {
+    const Foo& fooALias = FooDerived(msg);; // const references are allowed for temp objects
+    return fooALias;
+}
+```
+
+#### classes
+
+##### inheritance
+
+- the constructor of Child class always calls the constructor of Parent class. (if we don't specify which Parent
+  constructor is called, the default one will be called)
+- when nearing the end of its lifetime, first the child's destructor is called and then the parent's
+- an instance of Child can be copied into an instance of Parent, the fields inherited from Parent get passed into the
+  new Parent object, and the rest (Child fields) are ignored
+
+#### overloading rules (simplified)
+
+1. Parameters match perfectly - the exact matching function gets called
+2. Matching function cannot be found even after considering type conversion - an error is generated (e.g. if all
+   functions expect 2 parameters but we're only passing 1)
+3. Parameters don't match perfectly but a function can be called after converting the parameters
+    1. Type widening: char -> int, float -> double (least expensive)
+    2. Standard conversion: double -> int, Child class * -> Parent class *
+    3. User conversion: if class A has constructor with class B, then class B can be converted into class A (most
+       expensive conversion)
+
+overloading happens at compile time, after compilation the functions will be replaced with the addresses to call at
+runtime.
