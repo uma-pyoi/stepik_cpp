@@ -1,9 +1,7 @@
 #if 0
 #include <iostream>
 
-#include <cstddef> // size_t
 #include <cstring> // strlen, strcpy
-#include <algorithm> // swap
 
 struct String {
     String(const char *str = "") {
@@ -13,6 +11,7 @@ struct String {
     };
 
     String(size_t n, char c) {
+        // make a string of char c duplicated n times
         size = n;
         str = new char[n + 1];
         for (int i = 0; i < size; ++i) {
@@ -23,7 +22,7 @@ struct String {
 
     String(const String &other) {
         this->size = other.size;
-        this->str = new char[this->size + 1];
+        this->str = new char[other.size + 1];
         std::strcpy(this->str, other.str);
     }
 
@@ -32,13 +31,12 @@ struct String {
     }
 
     // assignment operator using swap
-    // (creates a temp copy of str to assign and swaps this str and the temp copy.
-    // copy gets destroyed)
+    // (creates a temp copy of passed str and swaps current str and the temp copy.
+    // copy gets destroyed as the function exits)
     String &operator =(String const &other) {
         if (this != &other) {
-            String test(other);
-            std::cout << "test size: " << test.size << '\n';
-            test.swap(*this);
+            String other_cpy(other);
+            other_cpy.swap(*this);
         }
         return *this;
     }
@@ -62,9 +60,9 @@ struct String {
     }
 
     void append(String &other) {
-        char *new_str = new char[size + other.size + 1];
+        char *new_str = new char[size + 1 + other.size];
         std::strcpy(new_str, str);
-        std::strcpy(new_str + size, other.str);
+        std::strcpy(new_str + size, other.str); // starts copying other.str at index of new_str + size ?
         size += other.size;
         delete [] str;
         str = new_str;

@@ -22,7 +22,6 @@ int data[rows][cols] = {
 int *m[rows];
 for (int i = 0; i < rows; ++i)
     m[i] = data[i];
-
 ```
 
 #### &
@@ -57,7 +56,7 @@ or we could create an alias for the returned value:
 int& meow{getData(i)}; // => meow is now an aliase for data[i], which allows us to change it directly
 ```
 
-###### & alias for temp objects
+##### & alias for temp objects
 
 for temporary objects, only const references can be made. (because non-const aliases will be unsafe).
 moreover, the temporary object will have its life prolonged as long as the const alias is in scope.
