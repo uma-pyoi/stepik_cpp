@@ -23,7 +23,7 @@ public:
         this->type = type;
     }
 
-    void virtual meow() const {
+    void meow() const override {
         std::cout << "meow <- " << this->getType() << '\n';
     }
 
