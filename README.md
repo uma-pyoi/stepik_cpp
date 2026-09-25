@@ -70,6 +70,16 @@ Foo &get_foo(char *msg) {
 
 #### classes
 
+##### destructors
+
+custom destructors must be defined if a class has fields that contain pointers or dynamically allocated memory
+
+virtual destructors must be declared in the Bass class if we allow to destroy the Derived class through a pointer/reference
+to the Base class.
+A virtual destructor in Base class will invoke the destructor of Derived class (same mechanism as when choosing which
+virtual method to call - because it's virtual c++ will know to look for the type's actual destructor). It is enough to
+declare a default virtual destructor for the Bass class.
+
 ##### inheritance
 
 - the constructor of Child class always calls the constructor of Parent class. (if we don't specify which Parent
@@ -91,3 +101,72 @@ Foo &get_foo(char *msg) {
 
 overloading happens at compile time, after compilation the functions will be replaced with the addresses to call at
 runtime.
+
+##### virtual methods
+
+```c++
+
+class Base {
+public:
+    Base() { age = 1; }
+
+    Base(int age) : age(age) {
+    };
+
+    virtual ~Base() = default;
+
+    virtual void greet() {
+        std::cout << "Base hello!, am " << getAge() << " years old" << '\n';
+    }
+
+    int getAge() const {
+        return age;
+    }
+
+private:
+    int age{};
+};
+
+class Derived : public Base {
+public:
+    Derived() : Base(2) {
+    };
+
+    void greet() override {
+        std::cout << "Derived hello!, am " << this->getAge() << " years old and " << this->getColor() << '\n';
+    }
+
+    std::string_view getColor() const {
+        return this->color;
+    }
+
+private:
+    std::string_view color{"purple"};
+};
+
+
+int main() {
+    Derived d{};
+
+    Base &bdAlias{d};
+    Base *bdPointer{&d};
+
+    /*
+      in both calls of greet() bellow we will be able to call Derived::getColor() successfully
+      because when we call bdAlias/bdPointer, c++ knows that method greet() is virtual, so at runtime
+      it determines that Derived::greet() should be called, inside which the pointer 'this'
+      will be pointing to an instance of Derived, which would make Derived::getColor() accessible
+    */
+    bdAlias.greet();
+    bdPointer->greet();
+
+
+    return 0;
+}
+```
+
+##### virtual destructors
+
+normal
+
+virtual destructors must 

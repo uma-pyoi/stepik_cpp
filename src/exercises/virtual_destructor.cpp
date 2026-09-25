@@ -1,3 +1,5 @@
+#if 0
+
 #include <iostream>
 
 struct Expression {
@@ -65,3 +67,6 @@ int main() {
     // (например, sube будет правым операндом expr, поэтому его удалять не нужно)
     delete expr;
 }
+
+
+#endif

@@ -48,7 +48,7 @@ int main() {
     cat.meow();
 
     // the virtual method meow() here will be able to call TinyCat::getType() successfully because
-    // meow is virtual, so at compile time C++ knows to use TinyCat::meow() instead, inside of which
+    // meow is virtual, so at runtime C++ knows to use TinyCat::meow() instead, inside of which
     // 'this' is TinyCat* (a pointer to TinyCat), so it can call TinyCat::getType()
     std::cout << "++cat reference to tiny cat: " << '\n';
     tcatReference.meow();
