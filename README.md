@@ -74,11 +74,42 @@ Foo &get_foo(char *msg) {
 
 custom destructors must be defined if a class has fields that contain pointers or dynamically allocated memory
 
-virtual destructors must be declared in the Bass class if we allow to destroy the Derived class through a pointer/reference
-to the Base class.
-A virtual destructor in Base class will invoke the destructor of Derived class (same mechanism as when choosing which
-virtual method to call - because it's virtual c++ will know to look for the type's actual destructor). It is enough to
-declare a default virtual destructor for the Bass class.
+##### virtual destructors
+
+consider the following code:
+
+```c++
+struct Person {
+    ...
+    virtual ~Person() {}
+private:
+    string _name;
+    int _age;
+};
+
+struct Student : Person {
+    ...
+private:
+    string _uni;
+};
+
+int main() {
+    Person *p = new Student("Alex", 21, "Oxford");
+    ...
+    delete p;
+}
+```
+
+virtual destructors must be declared in the Base class if we allow to destroy the Derived class through a
+pointer to the Base class.
+When an object Derived gets deleted through the pointer to Base, a destructor of Derived is called first, then
+destructor of Base. Derived's destructor will be correctly called because of virtual dispatch, same mechanism that
+correctly chooses the virtual method of Derived when invoked through a Base* pointer to Derived object.
+
+It is enough to declare a default virtual destructor for the Base class.
+
+Virtual dispatch is usually implemented using virtual tables associated with the class.
+If a class has a virtual method/destructor, then a virtual table is created.
 
 ##### inheritance
 
@@ -167,6 +198,5 @@ int main() {
 
 ##### virtual destructors
 
-normal
+#### classes
 
-virtual destructors must 
